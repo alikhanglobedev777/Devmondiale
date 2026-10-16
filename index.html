@@ -1218,6 +1218,70 @@ footer,footer a,footer p,footer span{color:#050708}
  .mobile-nav,.mobile-nav a,.mobile-menu-scrim,.hamburger-lines span,.menu-toggle{transition:none!important;animation:none!important}
 }
 
+/* V13 — mobile scroll motion: same 3D language as desktop, driven by visibility/touch. */
+@media (max-width:920px), (hover:none), (pointer:coarse) {
+  /* V9 suppressed all orbit 3D transforms on small screens; restore a bounded sway. */
+  .kinetic-scene.is-hovering .orbit-stage {
+    transform:perspective(1100px) rotateX(0deg) rotateY(0deg) scale(1)!important;
+    animation:dmTouchOrbitSway 5.4s ease-in-out infinite;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .kinetic-scene.is-hovering .orbit,
+  .kinetic-scene.is-hovering .orbit.two,
+  .kinetic-scene.is-hovering .ring-outer,
+  .kinetic-scene.is-hovering .ring-inner,
+  .kinetic-scene.is-hovering .about-orbit-ring {animation-play-state:running}
+  /* Bring back the floating hero/dashboard movement previously disabled under 560px. */
+  .kinetic-scene.is-hovering .workflow-window {
+    animation:dmTouchDashboard 5.2s ease-in-out infinite!important;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .kinetic-scene.is-hovering .flow-step:nth-child(odd){animation-duration:3.6s}
+  .kinetic-scene.is-hovering .flow-step:nth-child(even){animation-duration:4.1s}
+  /* An in-view card has a distinct, light 3D lift after its existing fly-in. */
+  html.motion-ready .fly-card.arrived.touch-active {
+    animation:dmTouchCardLift 4.2s ease-in-out infinite;
+    transform-origin:50% 55%;transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .touch-active .service-icon,.touch-active .diagram-icon,.touch-active .benefit-icon {
+    animation:dmTouchIconOrbit 3.6s ease-in-out infinite;
+  }
+  .fx-tilt.touch-pressed,.fx-tilt.touch-pressed:hover {
+    transform:perspective(800px) rotateX(4deg) rotateY(-6deg) translateY(-5px) scale(.98)!important;
+    box-shadow:0 15px 35px rgba(0,139,155,.22);
+  }
+  .video-wipe-button:active{transform:scale(.97)}
+}
+@keyframes dmTouchOrbitSway {
+  0%,100%{rotate:1 2 0 -8deg;scale:.985}
+  50%{rotate:2 1 0 8deg;scale:1.025}
+}
+@keyframes dmTouchDashboard {
+  0%,100%{transform:translateY(0) rotateX(0deg) rotateY(-2deg)}
+  50%{transform:translateY(-8px) rotateX(2deg) rotateY(3deg)}
+}
+@keyframes dmTouchCardLift {
+  0%,100%{transform:perspective(950px) rotateX(0deg) rotateY(0deg) translateY(0)}
+  45%{transform:perspective(950px) rotateX(2.2deg) rotateY(-2.8deg) translateY(-7px)}
+  75%{transform:perspective(950px) rotateX(-1.5deg) rotateY(2.1deg) translateY(-3px)}
+}
+@keyframes dmTouchIconOrbit {
+  0%,100%{transform:translateY(0) rotateY(0deg)}
+  50%{transform:translateY(-5px) rotateY(22deg)}
+}
+/* Respect the user's OS accessibility preference on mobile, as on desktop. */
+@media(prefers-reduced-motion:reduce){
+  .kinetic-scene.is-hovering .orbit-stage,
+  .kinetic-scene.is-hovering .workflow-window,
+  html.motion-ready .fly-card.arrived.touch-active,
+  .touch-active .service-icon,.touch-active .diagram-icon,.touch-active .benefit-icon,
+  .fx-tilt.touch-pressed {animation:none!important;will-change:auto}
+  .fx-tilt.touch-pressed{transform:none!important}
+}
+
 </style></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -1550,6 +1614,58 @@ footer,footer a,footer p,footer span{color:#050708}
   });
 })();
 
+</script>
+<script>
+/* V13: Mobile touch/scroll equivalents of the desktop hover and 3D motion. */
+(()=>{
+  'use strict';
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const coarse=window.matchMedia('(hover:none), (pointer:coarse)');
+  const small=window.matchMedia('(max-width:920px)');
+  if(reduced.matches || !(coarse.matches || small.matches)) return;
+  const scenes=[...document.querySelectorAll('.kinetic-scene')];
+  const cards=[...document.querySelectorAll('.fly-card')];
+  const makeVisible=element=>element.classList.add('arrived');
+  if('IntersectionObserver' in window){
+    // Toggle the existing desktop "is-hovering" keyframes only while in view.
+    const sceneObserver=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        const active=entry.isIntersecting;
+        entry.target.classList.toggle('is-hovering',active);
+        if(active) entry.target.classList.add('is-awake');
+      });
+    },{threshold:.18,rootMargin:'0px 0px -8% 0px'});
+    scenes.forEach(scene=>sceneObserver.observe(scene));
+    // Some cards originate outside the viewport, so wait for their parent to
+    // gather them, then activate a subtle 3D movement once they are visible.
+    const cardObserver=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        entry.target.classList.toggle('touch-active',entry.isIntersecting);
+        if(entry.isIntersecting) makeVisible(entry.target);
+      });
+    },{threshold:.12,rootMargin:'0px 0px -5% 0px'});
+    cards.forEach(card=>cardObserver.observe(card));
+  }else{
+    scenes.forEach(scene=>scene.classList.add('is-hovering','is-awake'));
+    cards.forEach(card=>{makeVisible(card);card.classList.add('touch-active')});
+  }
+  // A tap can intensify the same dimensional card response available on mouse hover.
+  // Never intercept links, navigation, tabs, or normal page scrolling.
+  document.addEventListener('pointerdown',event=>{
+    if(event.pointerType!=='touch' && !coarse.matches)return;
+    const card=event.target.closest('.fx-tilt');
+    if(card){
+      card.classList.add('touch-pressed');
+      window.setTimeout(()=>card.classList.remove('touch-pressed'),520);
+    }
+    const button=event.target.closest('.video-wipe-button');
+    if(button){
+      button.classList.remove('wipe-active');
+      void button.offsetWidth;
+      button.classList.add('wipe-active');
+    }
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
