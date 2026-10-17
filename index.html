@@ -1399,8 +1399,8 @@ footer,footer a,footer p,footer span{color:#050708}
   border:1px solid rgba(255,255,255,.72);border-radius:clamp(22px,2.4vw,30px);
   background:#FFFFFF;color:#050708;text-decoration:none;
   box-shadow:0 16px 35px rgba(0,54,64,.12),inset 0 1px 0 rgba(255,255,255,.8);
-  transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .85s ease,
-    box-shadow .55s ease,border-color .55s ease;
+  transition:transform .58s cubic-bezier(.2,.72,.22,1),opacity .85s ease,
+    box-shadow .42s ease,border-color .42s ease;
   transition-delay:calc(var(--card-order,0)*85ms);
 }
 #contact .dm-contact-card.reveal{
@@ -1413,9 +1413,9 @@ footer,footer a,footer p,footer span{color:#050708}
 #contact .dm-contact-card::after{
   content:"";position:absolute;pointer-events:none;
   inset:-60% auto -60% -70%;width:55%;z-index:-1;
-  background:linear-gradient(95deg,transparent,rgba(0,139,155,.075),transparent);
+  background:linear-gradient(95deg,transparent,rgba(0,139,155,.04),transparent);
   transform:skewX(-20deg) translateX(-140%);
-  transition:transform 1.1s cubic-bezier(.16,1,.3,1);
+  transition:transform 1.15s cubic-bezier(.2,.72,.22,1);
 }
 #contact .dm-contact-card:hover::after,#contact .dm-contact-card:focus-visible::after{
   transform:skewX(-20deg) translateX(620%);
@@ -1425,7 +1425,7 @@ footer,footer a,footer p,footer span{color:#050708}
   background:#008B9B;color:#FFFFFF;border-radius:15px;
   margin-bottom:clamp(21px,2.3vw,29px);
   box-shadow:0 8px 15px rgba(0,139,155,.16);
-  transition:transform .6s cubic-bezier(.16,1,.3,1),border-radius .6s ease;
+  transition:transform .42s cubic-bezier(.2,.72,.22,1),box-shadow .42s ease;
 }
 #contact .dm-contact-icon svg{width:24px;height:24px;flex:none}
 #contact .dm-contact-kicker{
@@ -1446,13 +1446,15 @@ footer,footer a,footer p,footer span{color:#050708}
 }
 #contact .dm-contact-sub span{display:inline-block;transition:transform .4s ease}
 #contact .dm-contact-card:is(:hover,:focus-visible) .dm-contact-icon{
-  transform:translateY(-4px) rotate(-10deg) scale(1.12);border-radius:18px;
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 10px 18px rgba(0,139,155,.20);
 }
-#contact .dm-contact-card:is(:hover,:focus-visible) .dm-contact-sub span{transform:translate(3px,-3px)}
+#contact .dm-contact-card:is(:hover,:focus-visible) .dm-contact-sub span{transform:translate(2px,-2px)}
 @media(hover:hover) and (pointer:fine){
   #contact .dm-contact-card.reveal.visible:is(:hover,:focus-visible){
-    transform:translate3d(0,-11px,0) rotateX(4deg) scale(1.012);
-    box-shadow:0 30px 56px rgba(0,54,64,.24);
+    transform:translate3d(0,-5px,0);
+    box-shadow:0 22px 42px rgba(0,54,64,.16);
+    border-color:rgba(0,139,155,.22);
     transition-delay:0s;
   }
 }
