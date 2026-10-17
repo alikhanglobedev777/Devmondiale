@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const {test} = require('node:test');
 
 const source = fs.readFileSync(path.join(__dirname, '../devmondiale-card-touch.js'), 'utf8');
-function setup({touch = true, reduced = false} = {}) {
+function setup({touch = true, reduced = false, nativeTouch = false} = {}) {
   const listeners = new Map();
   const timers = new Map();
   const options = [];
@@ -30,6 +30,7 @@ function setup({touch = true, reduced = false} = {}) {
     createElement: () => ({}),
     head: {appendChild() {}},
     addEventListener: listen,
+    elementFromPoint: () => cards[0],
   };
   let timerId = 0;
   const window = {
@@ -38,6 +39,7 @@ function setup({touch = true, reduced = false} = {}) {
     setTimeout: callback => {timers.set(++timerId, callback); return timerId;},
     clearTimeout: id => timers.delete(id),
   };
+  if (nativeTouch) window.ontouchstart = null;
   vm.runInNewContext(source, {document, window});
   const dispatch = (type, overrides = {}) => listeners.get(type)?.({
     target:cards[0], pointerType:'touch', pointerId:1, isPrimary:true,
@@ -45,7 +47,7 @@ function setup({touch = true, reduced = false} = {}) {
   });
   const flush = () => {for (const callback of [...timers.values()]) callback();};
   const active = card => card.classes.has('dm-touch-active');
-  return {cards, dispatch, flush, active, options};
+  return {cards, dispatch, flush, active, options, document};
 }
 
 test('service, secondary and contact cards respond to touch and reset after release', () => {
@@ -110,8 +112,44 @@ test('reduced motion disables tilt; passive handlers leave links and scrolling n
   env.dispatch('pointerdown');
   assert.equal(env.cards[0].properties.get('--touch-rx'), '0deg');
   assert.equal(env.cards[0].properties.get('--touch-ry'), '0deg');
-  for (const {type, settings} of env.options.filter(({type}) => type.startsWith('pointer') || type === 'scroll')) {
+  for (const {type, settings} of env.options.filter(({type}) => type.startsWith('pointer') || type.startsWith('touch') || type === 'scroll')) {
     assert.equal(settings.passive, true, type);
   }
   assert.ok(!env.options.some(({type}) => type === 'click'));
+});
+
+test('native touch follows the finger during scrolling and survives browser pointer cancellation', () => {
+  const env = setup({nativeTouch:true});
+  const touch = {identifier:4, clientX:80, clientY:100};
+  env.dispatch('touchstart', {touches:[touch]});
+  assert.ok(env.active(env.cards[0]));
+  env.dispatch('pointercancel');
+  env.dispatch('touchmove', {touches:[{...touch, clientX:130, clientY:140}]});
+  env.dispatch('scroll');
+  assert.ok(env.active(env.cards[0]));
+  assert.notEqual(env.cards[0].properties.get('--touch-x'), `${80 / 300 * 100}%`);
+  env.document.elementFromPoint = () => env.cards[2];
+  env.dispatch('touchmove', {touches:[touch]});
+  assert.equal(env.active(env.cards[0]), false);
+  assert.ok(env.active(env.cards[2]));
+  env.dispatch('touchend');
+  assert.ok(env.active(env.cards[2]));
+  env.flush();
+  assert.equal(env.active(env.cards[2]), false);
+});
+
+test('native touch clears outside cards, on multitouch and on touch cancellation', () => {
+  const env = setup({nativeTouch:true});
+  const touch = {identifier:1, clientX:80, clientY:100};
+  env.dispatch('touchstart', {touches:[touch]});
+  env.document.elementFromPoint = () => null;
+  env.dispatch('touchmove', {touches:[touch]});
+  assert.equal(env.active(env.cards[0]), false);
+  env.document.elementFromPoint = () => env.cards[0];
+  env.dispatch('touchmove', {touches:[touch]});
+  assert.ok(env.active(env.cards[0]));
+  env.dispatch('touchcancel');
+  assert.equal(env.active(env.cards[0]), false);
+  env.dispatch('touchstart', {touches:[touch, {...touch, identifier:2}]});
+  assert.equal(env.active(env.cards[0]), false);
 });
