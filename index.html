@@ -1452,9 +1452,9 @@ footer,footer a,footer p,footer span{color:#050708}
 #contact .dm-contact-card:is(:hover,:focus-visible) .dm-contact-sub span{transform:translate(2px,-2px)}
 @media(hover:hover) and (pointer:fine){
   #contact .dm-contact-card.reveal.visible:is(:hover,:focus-visible){
-    transform:translate3d(0,-5px,0);
-    box-shadow:0 22px 42px rgba(0,54,64,.16);
-    border-color:rgba(0,139,155,.22);
+    transform:translate3d(0,-7px,0);
+    box-shadow:0 24px 50px rgba(0,54,64,.19);
+    border-color:rgba(0,139,155,.48);
     transition-delay:0s;
   }
 }
@@ -1481,6 +1481,50 @@ footer,footer a,footer p,footer span{color:#050708}
     opacity:1;transform:none;transition:none!important;
   }
   #contact .dm-contact-card::after,#contact .dm-contact-icon{transition:none!important}
+}
+
+
+/* Only desktop/tablet-in-landscape: fit the COMPLETE hero in the viewport. */
+@media (min-width:921px) {
+  #top.hero {
+    height:100vh;
+    height:100svh;
+    min-height:0;
+    padding:clamp(96px,12.5vh,128px) 0 clamp(30px,5vh,46px);
+  }
+  #top .hero-grid { min-height:0; }
+  #top .hero-copy { padding-top:0; }
+  #top .hero h1, #top h1 {
+    font-size:clamp(52px,min(5.7vw,9.5vh),86px);
+    line-height:.99;
+    margin:clamp(13px,2.3vh,23px) 0;
+  }
+  #top .hero-description { font-size:clamp(14px,1.3vw,16px);line-height:1.62; }
+  #top .hero-buttons { margin-top:clamp(16px,2.7vh,25px); gap:clamp(12px,1.5vw,24px); }
+  #top .hero-proof { margin-top:clamp(16px,3.2vh,30px); }
+  #top .visual-wrap { height:min(540px,calc(100svh - 165px)); }
+  #top .workflow-window { min-height:0; }
+  #top .window-top { padding:16px 22px; }
+  #top .window-body { padding:21px 22px 17px; }
+  #top .workflow-title-row { margin-bottom:17px; }
+  #top .flow-stack { gap:12px; }
+  #top .flow-step { padding:12px 14px; }
+  #top .window-footer { margin-top:13px;padding-top:10px; }
+  #top .hero-bottom { bottom:clamp(8px,2vh,20px); }
+}
+@media (min-width:921px) and (max-height:740px) {
+  #top.hero { padding-top:94px;padding-bottom:22px; }
+  #top h1 {font-size:clamp(48px,min(5.2vw,9vh),70px);margin:12px 0;}
+  #top .hero-description{font-size:14px;line-height:1.52;}
+  #top .hero-buttons{margin-top:15px;}
+  #top .hero-proof{margin-top:14px;}
+  #top .visual-wrap{height:calc(100svh - 135px);}
+  #top .window-body{padding:15px 17px 12px;}
+  #top .window-top{padding:12px 18px;}
+  #top .workflow-title-row{margin-bottom:12px;}
+  #top .flow-stack{gap:8px;}
+  #top .flow-step{padding:9px 11px;}
+  #top .window-footer{margin-top:9px;padding-top:8px;}
 }
 
 </style></head>
