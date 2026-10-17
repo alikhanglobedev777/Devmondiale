@@ -4,6 +4,7 @@
 <head>
 <script>document.documentElement.classList.add("motion-ready")</script>
 <script src="./devmondiale-v15-mobile-fix.js" defer></script>
+<script src="./devmondiale-card-touch.js" defer></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="#FFFFFF" name="theme-color"/>
@@ -1980,7 +1981,7 @@ footer,footer a,footer p,footer span{color:#050708}
   // Never intercept links, navigation, tabs, or normal page scrolling.
   document.addEventListener('pointerdown',event=>{
     if(event.pointerType!=='touch' && !coarse.matches)return;
-    const card=event.target.closest('.fx-tilt');
+    const card=event.target.closest('.fx-tilt:not(.dm-touch-card)');
     if(card){
       card.classList.add('touch-pressed');
       window.setTimeout(()=>card.classList.remove('touch-pressed'),520);
