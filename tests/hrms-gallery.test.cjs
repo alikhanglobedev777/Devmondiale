@@ -4,51 +4,47 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'..','hrms-showcase.js'),'utf8');
-
 function fakePage(count=3){
-  const tabs=[],panels=[];
-  for(let i=0;i<count;i++){
-    const listeners={};
-    const attrs={'aria-controls':`p-${i}`,'aria-selected':String(i===0)};
-    const classes=new Set(i===0?['is-active']:[]);
-    const tab={tabIndex:i===0?0:-1,attrs,listeners,
-      classList:{toggle(c,on){if(on)classes.add(c);else classes.delete(c)},contains(c){return classes.has(c)}},
-      getAttribute(k){return attrs[k]},setAttribute(k,v){attrs[k]=v},
-      addEventListener(k,fn){listeners[k]=fn},focus(){tab.focused=true}
-    };
-    const viewport={scrollTop:100};
-    const panel={hidden:i!==0,querySelector(sel){return sel==='.hrms-image-window'?viewport:null},viewport};
-    tabs.push(tab);panels.push(panel);
+  function element(){
+    const events={};const classes=new Set();const attrs={};
+    return {events,attrs,hidden:false,tabIndex:-1,textContent:'',
+      classList:{toggle(name,on){if(on)classes.add(name);else classes.delete(name)},contains(name){return classes.has(name)}},
+      setAttribute(k,v){attrs[k]=v},addEventListener(k,fn){events[k]=fn},focus(){this.focused=true}};
   }
-  const root={querySelectorAll(sel){if(sel==='[role="tab"]')return tabs;throw Error('unrecognized '+sel)}};
-  const document={querySelector(sel){return sel==='[data-hrms-gallery]'?root:null},getElementById(id){return panels[Number(id.split('-')[1])]}};
+  const pages=Array.from({length:count},element),screens=Array.from({length:count},element),tabs=Array.from({length:count},element);
+  const prev=element(),next=element(),number=element(),label=element();
+  const elements={'[data-helio-prev]':prev,'[data-helio-next]':next,'[data-helio-number]':number,'[data-helio-label]':label};
+  const lists={'[data-helio-page]':pages,'[data-helio-screen]':screens,'[data-helio-tab]':tabs};
+  const root={querySelectorAll(selector){return lists[selector]||[]},querySelector(selector){return elements[selector]||null}};
+  const document={querySelector(selector){return selector==='[data-helio-showcase]'?root:null}};
   vm.runInNewContext(source,{document});
-  return {tabs,panels};
+  return {pages,screens,tabs,prev,next,number,label};
 }
-
-test('click selects exactly one HRMS panel and updates ARIA state',()=>{
-  const {tabs,panels}=fakePage();
-  tabs[1].listeners.click();
-  assert.equal(tabs.filter(t=>t.attrs['aria-selected']==='true').length,1);
-  assert.equal(tabs[1].attrs['aria-selected'],'true');
-  assert.deepEqual(panels.map(p=>p.hidden),[true,false,true]);
-  assert.equal(panels[1].viewport.scrollTop,0);
-  assert.equal(tabs[1].tabIndex,0);
+test('switching chapters updates text, screen, tab aria and counter',()=>{
+  const p=fakePage();p.tabs[1].events.click();
+  assert.deepEqual(p.pages.map(e=>e.hidden),[true,false,true]);
+  assert.deepEqual(p.screens.map(e=>e.hidden),[true,false,true]);
+  assert.equal(p.tabs[1].attrs['aria-selected'],'true');
+  assert.equal(p.tabs[0].attrs['aria-selected'],'false');
+  assert.equal(p.number.textContent,'02');
+  assert.equal(p.label.textContent,'02 — Employees');
 });
-
-test('ArrowRight and Home keyboard navigation move and restore focus',()=>{
-  const {tabs,panels}=fakePage();
-  let prevented=0;
-  tabs[0].listeners.keydown({key:'ArrowRight',preventDefault(){prevented++}});
-  assert.equal(tabs[1].focused,true);
-  assert.equal(panels[1].hidden,false);
-  tabs[1].listeners.keydown({key:'End',preventDefault(){prevented++}});
-  assert.equal(panels[2].hidden,false);
-  tabs[2].listeners.keydown({key:'Home',preventDefault(){prevented++}});
-  assert.equal(panels[0].hidden,false);
-  assert.equal(prevented,3);
+test('prev and next wrap through three chapters',()=>{
+  const p=fakePage();p.prev.events.click();assert.equal(p.number.textContent,'03');
+  p.next.events.click();assert.equal(p.number.textContent,'01');
 });
-
-test('script handles a missing gallery gracefully',()=>{
+test('keyboard tabs navigate and restore focused tab',()=>{
+  const p=fakePage();let prevents=0;
+  p.tabs[0].events.keydown({key:'ArrowRight',preventDefault(){prevents++}});
+  assert.equal(p.tabs[1].focused,true);assert.equal(p.tabs[1].tabIndex,0);
+  p.tabs[1].events.keydown({key:'End',preventDefault(){prevents++}});
+  assert.equal(p.tabs[2].focused,true);
+  p.tabs[2].events.keydown({key:'Home',preventDefault(){prevents++}});
+  assert.equal(p.tabs[0].focused,true);assert.equal(prevents,3);
+});
+test('script does nothing if root is absent',()=>{
   assert.doesNotThrow(()=>vm.runInNewContext(source,{document:{querySelector(){return null}}}));
+});
+test('script does nothing if three matching chapters are not present',()=>{
+  const p=fakePage(2);assert.equal(p.next.events.click,undefined);
 });
