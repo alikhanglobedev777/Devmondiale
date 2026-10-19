@@ -1,0 +1,23 @@
+/* Portfolio project cards and HelioHR case study; CargoPro styles remain the source of truth. */
+.project-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 0 40px}
+.project-pick{position:relative;display:flex;flex-direction:column;gap:0;min-width:0;min-height:250px;padding:28px 30px;border:1px solid rgba(0,139,155,.23);border-radius:27px;background:linear-gradient(145deg,#f4fbfa,#fff 65%);color:#113940;text-decoration:none;box-shadow:0 14px 35px rgba(0,88,99,.07);transition:border-color .24s,box-shadow .24s,transform .24s}
+.project-pick:hover{border-color:#008b9b;box-shadow:0 22px 48px rgba(0,88,99,.13);transform:translateY(-4px)}
+.project-pick:focus-visible{outline:3px solid #007a88;outline-offset:4px}
+.project-pick-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:21px}
+.project-pick-icon{display:grid;place-items:center;flex:none;width:43px;height:43px;border-radius:14px;background:#008b9b;color:#fff;font-size:22px;font-weight:700}
+.project-pick-count{font-size:10px;letter-spacing:.12em;font-weight:800;color:#33747c;text-align:right}
+.project-pick-title{font:700 clamp(26px,3vw,36px)/1.08 'Space Grotesk',sans-serif;letter-spacing:-.06em;color:#103a41}
+.project-pick-desc{margin:12px 0 23px;max-width:460px;color:#4d6d72;line-height:1.7;font-size:13px}
+.project-pick-foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(0,139,155,.13);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;font-weight:800;color:#007886}
+.project-pick-foot>span:last-child{font-size:19px}
+#cargopro,#heliohr{scroll-margin-top:110px}
+.helio-case{margin-top:clamp(46px,6vw,78px)}
+.helio-case .float-ticket{background:#e9f8f5;color:#006e7b;border-color:rgba(0,110,123,.2);font-size:9px;padding:10px 13px}
+.helio-case .story-screen{object-fit:contain;object-position:center top}
+.helio-case .story-screen[hidden],.helio-case .story-page[hidden]{display:none!important}
+.helio-case .story-actions{margin-top:auto;padding-top:24px}
+.helio-case .project-live-link{white-space:nowrap}
+.helio-outro{padding-bottom:0}
+@media(max-width:760px){.project-card-grid{grid-template-columns:1fr;gap:14px;margin-bottom:28px}.project-pick{min-height:220px;padding:24px;border-radius:22px}.helio-case{margin-top:48px}}
+@media(max-width:480px){.project-pick{min-height:205px;padding:21px}.project-pick-top{margin-bottom:15px}.project-pick-title{font-size:28px}.project-pick-desc{margin-bottom:18px}.helio-case .project-live-link{white-space:normal}}
+@media(prefers-reduced-motion:reduce){.project-pick{transition:none}}
