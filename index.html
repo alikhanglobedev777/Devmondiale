@@ -1543,6 +1543,35 @@ footer,footer a,footer p,footer span{color:#050708}
 }
 
 .service-visit-link{text-align:right;margin:20px 2px 0;color:#008B9B;font-size:14px;font-weight:700}.service-visit-link a{display:inline-flex;gap:8px;align-items:center;text-decoration:underline;text-underline-offset:4px}.service-visit-link a:hover{color:#00636E}
+
+/* Hover stability: workflow rows must not move out from under the pointer.
+   The old stepFocus keyframes animated transform/background, while hover
+   applied another transform and restarted the animation on mouseleave. */
+.flow-step,
+.flow-step:nth-child(2),
+.flow-step:nth-child(3),
+.flow-step:nth-child(4),
+.kinetic-scene.is-hovering .flow-step {
+  animation: none !important;
+  transform: none !important;
+  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.flow-step:hover,
+.kinetic-scene.is-hovering .flow-step:hover {
+  animation: none !important;
+  transform: none !important;
+  background: rgba(0,139,155,.06);
+  border-color: #008B9B;
+  box-shadow: 0 12px 26px rgba(0,139,155,.14);
+}
+/* Prevent the animated sweep from flashing across a hovered row. */
+.flow-step:after,
+.flow-step:nth-child(2):after,
+.flow-step:nth-child(3):after,
+.flow-step:nth-child(4):after {
+  animation: none !important;
+  opacity: 0;
+}
 </style><link rel="stylesheet" href="./hrms-showcase.css"/></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
