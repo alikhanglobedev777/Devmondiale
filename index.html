@@ -53,8 +53,8 @@ body{background:#008B9B}
 .hero{isolation:isolate}
 .hero:after{content:"";position:absolute;bottom:-145px;left:26%;width:440px;height:260px;background:rgba(0,139,155,.09);border-radius:60% 40% 70% 30%;filter:blur(65px);pointer-events:none;animation:fluidShape 13s ease-in-out infinite alternate}
 .visual-wrap{perspective:1300px}
-.workflow-window{--tilt-x:0deg;--tilt-y:0deg;transform-style:preserve-3d;animation:dashboardFloat 8s ease-in-out infinite;transition:filter .55s ease;will-change:transform}
-.workflow-window:hover{filter:brightness(1.09)}
+.workflow-window{--tilt-x:0deg;--tilt-y:0deg;transform-style:preserve-3d;animation:none;transition:box-shadow .35s ease,filter .35s ease;will-change:transform}
+.workflow-window:hover{filter:none}
 @keyframes dashboardFloat{0%,100%{transform:translateY(0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))}50%{transform:translateY(-13px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))}}
 @keyframes fluidShape{to{transform:translate3d(-80px,-55px,0) rotate(30deg);border-radius:30% 70% 35% 65%}}
 .service-card{border-radius:32px;overflow:hidden}
@@ -232,65 +232,67 @@ body{background:#008B9B;color:#FFFFFF}
 .btn-primary:hover{background:#008B9B}
 .btn-primary span{background:rgba(0,139,155,.12)}
 .btn-text .down{color:#008B9B}
-.visual-wrap:before{background:radial-gradient(circle,rgba(0,139,155,.23),rgba(0,139,155,.035) 48%,transparent 72%)}
-.orbit{border-color:rgba(0,139,155,.22)}
-.orbit.two{border-color:rgba(0,139,155,.12)}
-.orbit:before{background:#008B9B;box-shadow:0 0 18px rgba(0,139,155,.36)}
-.orbit.two:before{background:#008B9B;box-shadow:0 0 18px rgba(0,139,155,.36)}
-/* glass workflow device */
+.visual-wrap:before{background:radial-gradient(circle,rgba(8,30,40,.08),rgba(8,30,40,.02) 48%,transparent 72%);filter:blur(22px)}
+.orbit{border-color:rgba(8,30,40,.12)}
+.orbit.two{border-color:rgba(8,30,40,.08)}
+.orbit:before{background:#008B9B;box-shadow:0 0 0 4px rgba(0,139,155,.08)}
+.orbit.two:before{background:#008B9B;box-shadow:0 0 0 4px rgba(0,139,155,.08)}
+/* workflow board: cleaner, thicker product-card treatment */
 .workflow-window{
  border-radius:32px;
- background:linear-gradient(155deg,#008B9B 0%,#008B9B 52%,#008B9B 100%);
- border:1px solid rgba(0,139,155,.25);
- box-shadow:0 38px 95px rgba(0,139,155,.52),0 0 0 7px rgba(0,139,155,.035),inset 0 1px 0 rgba(255,255,255,.06);
- animation:levitate 7s ease-in-out infinite;
+ background:#FFFFFF;
+ border:3px solid #D8E4E8;
+ box-shadow:0 26px 54px rgba(15,23,42,.12),0 8px 16px rgba(15,23,42,.06);
+ animation:none;
  isolation:isolate;
 }
-.workflow-window:before{content:"";position:absolute;pointer-events:none;inset:0;border-radius:inherit;background:radial-gradient(circle at 80% 4%,rgba(0,139,155,.17),transparent 45%);z-index:0}
+.workflow-window:before{content:"";position:absolute;pointer-events:none;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,0) 30%);z-index:0}
 .window-top,.window-body{z-index:1;position:relative}
-.window-top{border-bottom:1px solid rgba(0,139,155,.15);background:rgba(0,139,155,.18)}
-.window-top-left{color:#008B9B}
-.window-dots i{background:#008B9B}
+.window-top{border-bottom:1px solid #D8E4E8;background:#F6FBFC}
+.window-top-left{color:#0F2230}
+.window-dots i{background:#A9BBC4}
 .window-dots i:first-child{background:#008B9B}
-.window-dots i:nth-child(2){background:#008B9B}
-.window-dots i:nth-child(3){background:#008B9B}
+.window-dots i:nth-child(2){background:#9CB7C0}
+.window-dots i:nth-child(3){background:#9CB7C0}
 .live-pill{color:#008B9B}
-.pulse-dot{background:#008B9B;box-shadow:0 0 0 5px rgba(0,139,155,.15);animation:brandPulse 2.2s ease-in-out infinite}
-.window-body{background-image:radial-gradient(rgba(0,139,155,.055) 1px,transparent 1px)}
-.workflow-title-row h3{color:#FFFFFF}
-.workflow-title-row .demo-tag{color:#008B9B;border:1px solid rgba(0,139,155,.45);background:rgba(0,139,155,.11)}
-.flow-stack:before{background:linear-gradient(180deg,#008B9B 0%,#008B9B 90%);width:3px;left:13.5px;box-shadow:0 0 12px rgba(0,139,155,.26)}
-.flow-stack:after{content:"";position:absolute;top:23px;left:11px;width:8px;height:8px;border-radius:50%;background:#008B9B;box-shadow:0 0 0 6px rgba(0,139,155,.07),0 0 20px rgba(0,139,155,.5);animation:workflowSignal 7.2s linear infinite;z-index:2;pointer-events:none}
+.pulse-dot{background:#008B9B;box-shadow:0 0 0 5px rgba(0,139,155,.12);animation:brandPulse 2.2s ease-in-out infinite}
+.window-body{background:#FFFFFF;background-image:radial-gradient(rgba(15,23,42,.08) .9px,transparent .9px);background-size:23px 23px}
+.workflow-title-row h3{color:#0F2230}
+.workflow-title-row .demo-tag{color:#008B9B;border:1px solid rgba(0,139,155,.24);background:rgba(0,139,155,.06)}
+.flow-stack:before{background:linear-gradient(180deg,#008B9B 0%,rgba(0,139,155,.58) 100%);width:3px;left:13.5px;box-shadow:none}
+.flow-stack:after{content:"";position:absolute;top:23px;left:11px;width:8px;height:8px;border-radius:50%;background:#008B9B;box-shadow:0 0 0 6px rgba(0,139,155,.08);animation:none;z-index:2;pointer-events:none}
 .flow-step{
- background:linear-gradient(125deg,#008B9B,#008B9B);border:1px solid rgba(0,139,155,.20);border-radius:18px;
- box-shadow:0 11px 20px rgba(0,139,155,.17);
- animation:flowSpotlight 7.2s ease-in-out infinite;
- transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+ background:#FFFFFF;border:1px solid #D8E4E8;border-radius:18px;
+ box-shadow:0 8px 18px rgba(15,23,42,.06);
+ animation:none;
+ transition:border-color .22s ease,box-shadow .22s ease,background-color .22s ease;
 }
 .flow-step:nth-child(2){animation-delay:1.8s}
 .flow-step:nth-child(3){animation-delay:3.6s}
 .flow-step:nth-child(4){animation-delay:5.4s}
-.flow-step:hover{transform:translateX(5px) translateY(-3px);border-color:rgba(0,139,155,.6);box-shadow:0 16px 28px rgba(0,139,155,.26)}
-.flow-step:before{background:#008B9B;outline-color:#008B9B;border:2px solid #008B9B;box-shadow:0 0 14px rgba(0,139,155,.32)}
-.flow-step:nth-child(2):before{background:#008B9B;outline-color:#008B9B}
-.flow-step:nth-child(3):before{background:#008B9B;outline-color:#008B9B}
-.flow-step:nth-child(4):before{background:#008B9B;outline-color:#008B9B}
-.step-icon{background:rgba(0,139,155,.20);color:#008B9B}
-.flow-step:nth-child(2) .step-icon{background:rgba(0,139,155,.14);color:#008B9B}
-.flow-step:nth-child(3) .step-icon{background:rgba(0,139,155,.09);color:#008B9B}
-.flow-step:nth-child(4) .step-icon{background:rgba(0,139,155,.13);color:#008B9B}
-.step-info strong{color:#FFFFFF}
-.step-info small{color:#008B9B}
-.step-state{color:#008B9B;background:rgba(0,139,155,.15);border-color:rgba(0,139,155,.40)}
-.flow-step:nth-child(2) .step-state{color:#008B9B;background:rgba(0,139,155,.11);border-color:rgba(0,139,155,.30)}
-.flow-step:nth-child(3) .step-state{color:#008B9B;background:rgba(0,139,155,.08);border-color:rgba(0,139,155,.20)}
-.flow-step:nth-child(4) .step-state{color:#008B9B;background:rgba(0,139,155,.10);border-color:rgba(0,139,155,.25)}
-.window-footer{border-top:1px solid rgba(0,139,155,.17);color:#008B9B}
+.flow-step:hover{transform:none;border-color:rgba(0,139,155,.38);box-shadow:0 12px 22px rgba(15,23,42,.09);background:#FCFEFE}
+.flow-step:before{background:#FFFFFF;outline-color:#008B9B;border:2px solid #008B9B;box-shadow:none}
+.flow-step:nth-child(2):before{background:#FFFFFF;outline-color:#008B9B}
+.flow-step:nth-child(3):before{background:#FFFFFF;outline-color:#008B9B}
+.flow-step:nth-child(4):before{background:#FFFFFF;outline-color:#008B9B}
+.step-icon{background:#EAF6F8;color:#008B9B}
+.flow-step:nth-child(2) .step-icon{background:#EAF6F8;color:#008B9B}
+.flow-step:nth-child(3) .step-icon{background:#EAF6F8;color:#008B9B}
+.flow-step:nth-child(4) .step-icon{background:#EAF6F8;color:#008B9B}
+.step-info strong{color:#0F2230}
+.step-info small{color:#62717B}
+.step-state{color:#008B9B;background:#F1FAFB;border-color:rgba(0,139,155,.18)}
+.flow-step:nth-child(2) .step-state{color:#008B9B;background:#F1FAFB;border-color:rgba(0,139,155,.18)}
+.flow-step:nth-child(3) .step-state{color:#008B9B;background:#F1FAFB;border-color:rgba(0,139,155,.18)}
+.flow-step:nth-child(4) .step-state{color:#008B9B;background:#F1FAFB;border-color:rgba(0,139,155,.18)}
+.window-footer{border-top:1px solid #D8E4E8;color:#62717B}
 .window-footer span:last-child{color:#008B9B}
-.float-chip{border-radius:18px}
-.chip-a{background:#008B9B;color:#008B9B;border:1px solid rgba(0,139,155,.55);box-shadow:0 15px 33px rgba(0,139,155,.21)}
-.chip-b{background:rgba(0,139,155,.95);border:1px solid rgba(0,139,155,.58);box-shadow:0 17px 32px rgba(0,139,155,.29)}
-.chip-b .upper{color:#008B9B}
+.float-chip{border-radius:18px;backdrop-filter:none}
+.chip-a{background:#FFFFFF;color:#0F2230;border:2px solid rgba(0,139,155,.18);box-shadow:0 16px 28px rgba(15,23,42,.11)}
+.chip-a .chip-icon{color:#008B9B}
+.chip-b{background:#FFFFFF;border:2px solid rgba(15,23,42,.10);box-shadow:0 16px 28px rgba(15,23,42,.11)}
+.chip-b .upper{color:#62717B}
+.chip-b strong{color:#0F2230}
 .chip-b .check{color:#008B9B}
 /* brand-color details through the remainder of the site */
 .marquee{background:#008B9B;color:#008B9B}
@@ -1571,6 +1573,39 @@ footer,footer a,footer p,footer span{color:#050708}
 .flow-step:nth-child(4):after {
   animation: none !important;
   opacity: 0;
+}
+
+/* Hero cleanup: remove every ambient teal overlay (including later legacy overrides).
+   Brand teal stays on text, buttons, icons, and workflow progress markers. */
+#top.hero {
+  background: #FFFFFF !important;
+}
+#top.hero::before,
+#top.hero::after,
+#top .hero-glow,
+#top .visual-wrap::before {
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+/* Keep both decorative orbit rings visible; do not reintroduce ambient tint. */
+#top .orbit,
+#top .orbit.two {
+  display: block !important;
+}
+#top .workflow-window {
+  border: 3px solid #008B9B;
+  box-shadow: 0 22px 50px rgba(15,23,42,.12), 0 6px 14px rgba(15,23,42,.05);
+}
+#top .workflow-window::before {
+  background: none !important;
+}
+/* Keep a neutral background behind the board on all screen sizes. */
+#top .visual-wrap,
+#top .orbit-stage {
+  background: transparent !important;
 }
 </style><link rel="stylesheet" href="./hrms-showcase.css"/></head>
 <body>
